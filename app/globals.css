@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: #0a0a0b;
+  color: #c8c8d8;
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: #ff5500; color: #fff; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #111114; }
+::-webkit-scrollbar-thumb { background: #2e2e35; border-radius: 2px; }
+
+/* Fire glow effect */
+.glow-flame {
+  box-shadow: 0 0 40px rgba(255, 85, 0, 0.15), 0 0 80px rgba(255, 85, 0, 0.05);
+}
+
+.text-glow {
+  text-shadow: 0 0 30px rgba(255, 85, 0, 0.5);
+}
+
+/* Animated border */
+@keyframes borderPulse {
+  0%, 100% { border-color: rgba(255,85,0,0.3); }
+  50% { border-color: rgba(255,85,0,0.7); }
+}
+.border-animate { animation: borderPulse 2s ease infinite; }
+
+/* Card hover */
+.user-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.user-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255,85,0,0.1);
+}
+
+/* Input focus */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #ff5500 !important;
+  box-shadow: 0 0 0 2px rgba(255,85,0,0.15);
+}
