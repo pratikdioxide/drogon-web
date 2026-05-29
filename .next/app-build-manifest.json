@@ -16,10 +16,11 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/page.js"
     ],
-    "/admin/dashboard/page": [
+    "/admin/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/dashboard/page.js"
+      "static/css/app/admin/layout.css",
+      "static/chunks/app/admin/layout.js"
     ]
   }
 }

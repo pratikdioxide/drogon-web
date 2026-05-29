@@ -11,3 +11,34 @@ expertMode = true
 NEON_AUTH_URL = "https://ep-solitary-bird-aqkonq07.neonauth.c-8.us-east-1.aws.neon.tech/neondb/auth"
 NEXT_PUBLIC_NEON_AUTH_URL = "https://ep-solitary-bird-aqkonq07.neonauth.c-8.us-east-1.aws.neon.tech/neondb/auth"
 DATABASE_URL = "postgresql://neondb_owner:npg_ELRIYcdjy16b@ep-solitary-bird-aqkonq07-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+BOT_TOKEN = "8967226051:AAGGPCUMQE2pm4e6xBwUeaGIbwOnDYkptsI"
+API_BASE_URL = "https://leakosint-by-noneusr.vercel.app/@None_usernam3/free/public/api/search="
+BOT_HEALTH_URL = "https://drogon-bot-main.onrender.com/health"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev -- --port 5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
