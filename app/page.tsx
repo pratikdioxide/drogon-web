@@ -4,11 +4,11 @@ import { useState } from 'react'
 type Record = { [key: string]: string }
 
 export default function Home() {
-  const [query, setQuery]   = useState('')
-  const [result, setResult] = useState<Record | Record[] | null>(null)
+  const [query, setQuery]     = useState('')
+  const [result, setResult]   = useState<Record | Record[] | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError]   = useState('')
-  const [page, setPage]     = useState(0)
+  const [error, setError]     = useState('')
+  const [page, setPage]       = useState(0)
 
   async function search(e: React.FormEvent) {
     e.preventDefault()
@@ -34,19 +34,18 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-ash-600 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-2xl">🐉</span>
           <span className="font-display font-800 text-xl text-white tracking-tight">Drogon</span>
           <span className="text-xs bg-ash-700 text-ash-200 px-2 py-0.5 rounded-full font-mono">free lookup</span>
         </div>
-        <a href="/admin" className="text-xs text-ash-300 hover:text-flame-400 transition-colors font-mono">
-          admin →
+        <a href="/admin"
+          className="text-xs bg-ash-700 hover:bg-ash-600 border border-ash-500 hover:border-flame-500/50 text-ash-200 hover:text-white px-3 py-1.5 rounded-lg font-mono transition-all">
+          Admin Panel
         </a>
       </header>
 
       {/* Hero */}
       <div className="flex-1 flex flex-col items-center justify-start pt-20 px-4">
         <div className="text-center mb-12 animate-fade-in">
-          <div className="text-6xl mb-6">🐉</div>
           <h1 className="font-display font-800 text-4xl md:text-5xl text-white mb-4 text-glow">
             Find anyone instantly
           </h1>
@@ -80,7 +79,7 @@ export default function Home() {
         {/* Error */}
         {error && (
           <div className="mt-6 w-full max-w-xl bg-red-900/20 border border-red-800 rounded-xl p-4 text-red-300 text-sm font-mono animate-fade-in">
-            ⚠ {error}
+            {error}
           </div>
         )}
 
@@ -95,11 +94,11 @@ export default function Home() {
                 <div className="flex gap-2">
                   <button onClick={() => setPage(p => p - 1)} disabled={page === 0}
                     className="px-3 py-1 bg-ash-700 hover:bg-ash-600 disabled:opacity-30 rounded-lg text-sm transition-colors">
-                    ← Prev
+                    Prev
                   </button>
                   <button onClick={() => setPage(p => p + 1)} disabled={page === records.length - 1}
                     className="px-3 py-1 bg-ash-700 hover:bg-ash-600 disabled:opacity-30 rounded-lg text-sm transition-colors">
-                    Next →
+                    Next
                   </button>
                 </div>
               </div>
@@ -114,7 +113,7 @@ export default function Home() {
                 {Object.entries(current).map(([k, v]) => (
                   <div key={k} className="flex gap-3 border-b border-ash-600 pb-3 last:border-0 last:pb-0">
                     <span className="text-ash-300 text-sm font-mono w-32 shrink-0">{k}</span>
-                    <span className="text-white text-sm font-mono break-all">{v || '—'}</span>
+                    <span className="text-white text-sm font-mono break-all">{String(v) || '—'}</span>
                   </div>
                 ))}
               </div>
@@ -124,14 +123,13 @@ export default function Home() {
 
         {result !== null && records.length === 0 && !loading && (
           <div className="mt-8 text-ash-300 font-mono text-sm animate-fade-in">
-            🔍 No record found for <span className="text-white">{query}</span>
+            No record found for <span className="text-white">{query}</span>
           </div>
         )}
       </div>
 
-      {/* Footer */}
       <footer className="border-t border-ash-700 px-6 py-4 text-center text-ash-400 text-xs font-mono">
-        Drogon 🐉 — free info lookup
+        Drogon — free info lookup
       </footer>
     </main>
   )
