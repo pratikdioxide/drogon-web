@@ -13,6 +13,10 @@ async function proxy(req: NextRequest, path: string): Promise<NextResponse> {
   }
   const cookie = req.headers.get('cookie')
   if (cookie) headers['cookie'] = cookie
+  const origin = req.headers.get('origin')
+  if (origin) headers['origin'] = origin
+  const host = req.headers.get('host')
+  if (host) headers['x-forwarded-host'] = host
 
   let body: BodyInit | undefined
   if (req.method !== 'GET' && req.method !== 'HEAD') {
