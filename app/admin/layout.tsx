@@ -5,7 +5,7 @@ import { authClient } from '@/lib/neon-auth'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <NeonAuthUIProvider authClient={authClient as any} redirectTo="/admin/dashboard">
+    <NeonAuthUIProvider authClient={authClient as any} redirectTo="/admin/dashboard" signUp={false}>
       {children}
     </NeonAuthUIProvider>
   )
