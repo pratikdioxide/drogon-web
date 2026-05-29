@@ -1,0 +1,105 @@
+18:35:38.594 Running build in Washington, D.C., USA (East) – iad1
+18:35:38.595 Build machine configuration: 2 cores, 8 GB
+18:35:38.751 Cloning github.com/pratikdioxide/drogon-web (Branch: main, Commit: 9081923)
+18:35:46.115 Cloning completed: 7.364s
+18:35:46.487 Restored build cache from previous deployment (8J1nrKGojSM5WWCK9qPFLspGA896)
+18:35:46.754 Running "vercel build"
+18:35:46.883 Vercel CLI 54.4.1
+18:35:47.330 WARNING: You should not upload the `.next` directory.
+18:35:47.336 Running "install" command: `npm install`...
+18:35:49.383 npm warn ERESOLVE overriding peer dependency
+18:35:49.384 npm warn While resolving: @better-auth/core@1.4.18
+18:35:49.385 npm warn Found: jose@5.10.0
+18:35:49.385 npm warn node_modules/jose
+18:35:49.386 npm warn   jose@"^5.2.0" from the root project
+18:35:49.387 npm warn
+18:35:49.389 npm warn Could not resolve dependency:
+18:35:49.389 npm warn peer jose@"^6.1.0" from @better-auth/core@1.4.18
+18:35:49.389 npm warn node_modules/@better-auth/core
+18:35:49.389 npm warn   peer @better-auth/core@"1.4.18" from @better-auth/telemetry@1.4.18
+18:35:49.390 npm warn   node_modules/@better-auth/telemetry
+18:35:49.390 npm warn   1 more (better-auth)
+18:35:49.390 npm warn
+18:35:49.390 npm warn Conflicting peer dependency: jose@6.2.3
+18:35:49.391 npm warn node_modules/jose
+18:35:49.391 npm warn   peer jose@"^6.1.0" from @better-auth/core@1.4.18
+18:35:49.391 npm warn   node_modules/@better-auth/core
+18:35:49.391 npm warn     peer @better-auth/core@"1.4.18" from @better-auth/telemetry@1.4.18
+18:35:49.391 npm warn     node_modules/@better-auth/telemetry
+18:35:49.392 npm warn     1 more (better-auth)
+18:36:10.876 npm warn ERESOLVE overriding peer dependency
+18:36:10.891 npm warn ERESOLVE overriding peer dependency
+18:36:10.892 npm warn While resolving: @better-auth/passkey@1.4.9
+18:36:10.893 npm warn Found: better-auth@1.4.18
+18:36:10.893 npm warn node_modules/better-auth
+18:36:10.894 npm warn   peer better-auth@"^1.4.6" from @daveyplate/better-auth-ui@3.3.9
+18:36:10.894 npm warn   node_modules/@daveyplate/better-auth-ui
+18:36:10.894 npm warn     @daveyplate/better-auth-ui@"3.3.9" from @neondatabase/auth-ui@0.2.0-beta
+18:36:10.895 npm warn     node_modules/@neondatabase/auth-ui
+18:36:10.895 npm warn   1 more (@neondatabase/auth)
+18:36:10.895 npm warn
+18:36:10.895 npm warn Could not resolve dependency:
+18:36:10.896 npm warn peer better-auth@"1.4.9" from @better-auth/passkey@1.4.9
+18:36:10.896 npm warn node_modules/@better-auth/passkey
+18:36:10.897 npm warn   peer @better-auth/passkey@">=1.4.6" from @daveyplate/better-auth-ui@3.3.9
+18:36:10.897 npm warn   node_modules/@daveyplate/better-auth-ui
+18:36:10.897 npm warn   1 more (@neondatabase/auth-ui)
+18:36:10.898 npm warn
+18:36:10.898 npm warn Conflicting peer dependency: better-auth@1.4.9
+18:36:10.898 npm warn node_modules/better-auth
+18:36:10.899 npm warn   peer better-auth@"1.4.9" from @better-auth/passkey@1.4.9
+18:36:10.899 npm warn   node_modules/@better-auth/passkey
+18:36:10.899 npm warn     peer @better-auth/passkey@">=1.4.6" from @daveyplate/better-auth-ui@3.3.9
+18:36:10.899 npm warn     node_modules/@daveyplate/better-auth-ui
+18:36:10.899 npm warn     1 more (@neondatabase/auth-ui)
+18:36:14.514 npm warn ERESOLVE overriding peer dependency
+18:36:14.515 npm warn While resolving: @daveyplate/better-auth-ui@3.3.9
+18:36:14.516 npm warn Found: lucide-react@0.383.0
+18:36:14.516 npm warn node_modules/lucide-react
+18:36:14.517 npm warn   lucide-react@"^0.383.0" from the root project
+18:36:14.517 npm warn
+18:36:14.517 npm warn Could not resolve dependency:
+18:36:14.517 npm warn peer lucide-react@">=0.469.0" from @daveyplate/better-auth-ui@3.3.9
+18:36:14.518 npm warn node_modules/@daveyplate/better-auth-ui
+18:36:14.518 npm warn   @daveyplate/better-auth-ui@"3.3.9" from @neondatabase/auth-ui@0.2.0-beta
+18:36:14.518 npm warn   node_modules/@neondatabase/auth-ui
+18:36:14.518 npm warn
+18:36:14.518 npm warn Conflicting peer dependency: lucide-react@1.17.0
+18:36:14.519 npm warn node_modules/lucide-react
+18:36:14.519 npm warn   peer lucide-react@">=0.469.0" from @daveyplate/better-auth-ui@3.3.9
+18:36:14.519 npm warn   node_modules/@daveyplate/better-auth-ui
+18:36:14.519 npm warn     @daveyplate/better-auth-ui@"3.3.9" from @neondatabase/auth-ui@0.2.0-beta
+18:36:14.519 npm warn     node_modules/@neondatabase/auth-ui
+18:36:16.821 npm error code ERESOLVE
+18:36:16.822 npm error ERESOLVE could not resolve
+18:36:16.834 npm error
+18:36:16.836 npm error While resolving: @neondatabase/auth@0.4.1-beta
+18:36:16.836 npm error Found: next@14.2.35
+18:36:16.837 npm error node_modules/next
+18:36:16.837 npm error   next@"^14.2.0" from the root project
+18:36:16.838 npm error   peerOptional next@"^14.0.0 || ^15.0.0 || ^16.0.0" from better-auth@1.4.9
+18:36:16.838 npm error   node_modules/@neondatabase/auth-ui/node_modules/better-auth
+18:36:16.839 npm error     better-auth@"1.4.9" from @neondatabase/auth-ui@0.2.0-beta
+18:36:16.842 npm error     node_modules/@neondatabase/auth-ui
+18:36:16.846 npm error       @neondatabase/auth-ui@"^0.2.0-beta" from the root project
+18:36:16.847 npm error       1 more (@neondatabase/auth)
+18:36:16.847 npm error   1 more (better-auth)
+18:36:16.847 npm error
+18:36:16.848 npm error Could not resolve dependency:
+18:36:16.848 npm error peerOptional next@">=16.0.0" from @neondatabase/auth@0.4.1-beta
+18:36:16.849 npm error node_modules/@neondatabase/auth
+18:36:16.849 npm error   @neondatabase/auth@"^0.4.1-beta" from the root project
+18:36:16.849 npm error
+18:36:16.850 npm error Conflicting peer dependency: next@16.2.6
+18:36:16.850 npm error node_modules/next
+18:36:16.850 npm error   peerOptional next@">=16.0.0" from @neondatabase/auth@0.4.1-beta
+18:36:16.854 npm error   node_modules/@neondatabase/auth
+18:36:16.854 npm error     @neondatabase/auth@"^0.4.1-beta" from the root project
+18:36:16.855 npm error
+18:36:16.855 npm error Fix the upstream dependency conflict, or retry this command with --force or --legacy-peer-deps to accept an incorrect (and potentially broken) dependency resolution.
+18:36:16.856 npm error
+18:36:16.862 npm error
+18:36:16.863 npm error For a full report see:
+18:36:16.863 npm error /vercel/.npm/_logs/2026-05-29T13_05_47_672Z-eresolve-report.txt
+18:36:16.866 npm error A complete log of this run can be found in: /vercel/.npm/_logs/2026-05-29T13_05_47_672Z-debug-0.log
+18:36:16.989 Error: Command "npm install" exited with 1
