@@ -1,139 +1,184 @@
 'use client'
 import { useState } from 'react'
-
-type Record = { [key: string]: string }
+import { User, Phone, MapPin, FileText, LayoutList, Search, Loader2, ChevronRight } from 'lucide-react'
 
 export default function Home() {
-  const [query, setQuery]     = useState('')
-  const [result, setResult]   = useState<Record | Record[] | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
-  const [debug, setDebug]     = useState('')
-  const [page, setPage]       = useState(0)
+  const [query, setQuery]       = useState('')
+  const [fields, setFields]     = useState<{ key: string; value: string }[]>([])
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
+  const [searched, setSearched] = useState(false)
+  const [showDebug, setShowDebug] = useState(false)
+  const [debugInfo, setDebugInfo] = useState('')
+
+  function parseFields(data: any): { key: string; value: string }[] {
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'string') {
+      return data.map((line: string) => {
+        const idx = line.indexOf(':')
+        if (idx === -1) return { key: line, value: '' }
+        return { key: line.slice(0, idx).trim(), value: line.slice(idx + 1).trim() }
+      })
+    }
+    if (typeof data === 'object' && !Array.isArray(data)) {
+      return Object.entries(data).map(([k, v]) => ({ key: k, value: String(v ?? '—') }))
+    }
+    if (Array.isArray(data) && typeof data[0] === 'object') {
+      return Object.entries(data[0]).map(([k, v]) => ({ key: k, value: String(v ?? '—') }))
+    }
+    return []
+  }
 
   async function search(e: React.FormEvent) {
     e.preventDefault()
     if (!query.trim()) return
-    setLoading(true); setError(''); setResult(null); setPage(0); setDebug('')
-
+    setLoading(true); setError(''); setFields([]); setSearched(false); setDebugInfo('')
     try {
       const url = `/api/search?q=${encodeURIComponent(query.trim())}`
-      setDebug(`Calling: ${url}`)
-
-      const r = await fetch(url)
+      const r   = await fetch(url)
       const text = await r.text()
-
-      setDebug(prev => prev + `\nStatus: ${r.status}\nRaw response: ${text.slice(0, 500)}`)
-
+      setDebugInfo(`Status: ${r.status}\nResponse: ${text.slice(0, 800)}`)
       let d
-      try { d = JSON.parse(text) }
-      catch { setError(`Invalid JSON response: ${text.slice(0, 200)}`); return }
-
-      if (!r.ok) { setError(d.error || `HTTP ${r.status}`); return }
-      setResult(d.data)
+      try { d = JSON.parse(text) } catch { setError('Invalid response from server'); return }
+      if (!r.ok) { setError(d.error || `Error ${r.status}`); return }
+      if (!d.data || (Array.isArray(d.data) && d.data.length === 0)) { setSearched(true); return }
+      setFields(parseFields(d.data))
+      setSearched(true)
     } catch (err: any) {
-      setError(err.message || 'Unknown error')
-      setDebug(prev => prev + `\nException: ${err.message}`)
+      setError(err.message || 'Network error')
     } finally {
       setLoading(false)
     }
   }
 
-  const records = Array.isArray(result) ? result : result ? [result] : []
-  const current = records[page]
+  const categories: Record<string, { key: string; value: string }[]> = {}
+  fields.forEach(f => {
+    const k = f.key.toLowerCase()
+    let cat = 'Other'
+    if (k.includes('mobile') || k.includes('phone') || k.includes('email') || k.includes('mail')) cat = 'Contact'
+    else if (k.includes('name') || k.includes('dob') || k.includes('gender') || k.includes('age')) cat = 'Identity'
+    else if (k.includes('address') || k.includes('city') || k.includes('state') || k.includes('pin') || k.includes('district')) cat = 'Address'
+    else if (k.includes('document') || k.includes('pan') || k.includes('aadhar') || k.includes('voter') || k.includes('passport')) cat = 'Documents'
+    if (!categories[cat]) categories[cat] = []
+    categories[cat].push(f)
+  })
+
+  const catOrder = ['Identity', 'Contact', 'Address', 'Documents', 'Other']
+  const catIcons: Record<string, React.ReactNode> = {
+    Identity:  <User size={13} />,
+    Contact:   <Phone size={13} />,
+    Address:   <MapPin size={13} />,
+    Documents: <FileText size={13} />,
+    Other:     <LayoutList size={13} />,
+  }
 
   return (
     <main className="min-h-screen bg-ash-900 flex flex-col">
-      {/* Header — no admin link */}
-      <header className="border-b border-ash-600 px-6 py-4 flex items-center gap-3">
+      <header className="border-b border-ash-700 px-6 py-4 flex items-center gap-3">
         <span className="font-display font-800 text-xl text-white tracking-tight">Drogon</span>
-        <span className="text-xs bg-ash-700 text-ash-200 px-2 py-0.5 rounded-full font-mono">free lookup</span>
+        <span className="text-xs bg-ash-700 text-ash-300 px-2 py-0.5 rounded-full font-mono">free lookup</span>
       </header>
 
-      <div className="flex-1 flex flex-col items-center justify-start pt-20 px-4">
-        <div className="text-center mb-12 animate-fade-in">
-          <h1 className="font-display font-800 text-4xl md:text-5xl text-white mb-4 text-glow">
-            Find anyone instantly
+      <div className="flex-1 flex flex-col items-center justify-start pt-16 pb-12 px-4 md:px-[10%]">
+
+        {/* Hero */}
+        <div className="text-center mb-10 animate-fade-in max-w-2xl">
+          <div className="inline-flex items-center gap-1.5 bg-flame-500/10 border border-flame-500/20 text-flame-400 text-xs font-mono px-3 py-1 rounded-full mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-flame-500 animate-pulse-slow" />
+            Powered by Drogon Bot
+          </div>
+          <h1 className="font-display font-800 text-white mb-4 leading-none" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)' }}>
+            Search anyone by<br />
+            <span className="text-flame-500">email</span> or <span className="text-flame-500">number</span>
           </h1>
-          <p className="text-ash-200 text-lg max-w-md mx-auto">
-            Enter an email or mobile number to retrieve all available information from the database.
+          <p className="text-ash-300 text-base max-w-sm mx-auto leading-relaxed">
+            Enter any Indian mobile number or email address to instantly retrieve all linked information.
           </p>
         </div>
 
-        <form onSubmit={search} className="w-full max-w-xl animate-slide-up">
-          <div className="relative">
-            <input
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="john@example.com  or  9876543210"
-              className="w-full bg-ash-800 border border-ash-500 rounded-xl px-5 py-4 text-white font-mono text-sm placeholder:text-ash-400 pr-32"
-            />
-            <button
-              type="submit" disabled={loading}
-              className="absolute right-2 top-2 bottom-2 px-5 bg-flame-500 hover:bg-flame-600 disabled:opacity-50 text-white font-display font-600 rounded-lg text-sm transition-colors"
-            >
-              {loading ? '...' : 'Search'}
+        {/* Search */}
+        <form onSubmit={search} className="w-full animate-slide-up mb-3">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-ash-400" />
+              <input
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                placeholder="9876543210 or john@example.com"
+                className="w-full bg-ash-800 border border-ash-500 rounded-xl pl-10 pr-4 py-3.5 text-white font-mono text-sm placeholder:text-ash-500"
+              />
+            </div>
+            <button type="submit" disabled={loading}
+              className="px-6 py-3.5 bg-flame-500 hover:bg-flame-600 disabled:opacity-50 text-white font-display font-700 rounded-xl text-sm transition-colors flex items-center gap-2">
+              {loading
+                ? <><Loader2 size={14} className="animate-spin" /> Searching</>
+                : <>Search <ChevronRight size={14} /></>
+              }
             </button>
           </div>
-          <p className="text-center text-ash-400 text-xs mt-3 font-mono">
-            Works with email addresses and Indian mobile numbers
-          </p>
         </form>
 
         {/* Error */}
         {error && (
-          <div className="mt-6 w-full max-w-xl bg-red-900/20 border border-red-800 rounded-xl p-4 text-red-300 text-sm font-mono animate-fade-in">
+          <div className="mt-4 w-full bg-red-950/50 border border-red-900 rounded-xl p-4 text-red-300 text-sm font-mono">
             {error}
           </div>
         )}
 
-        {/* Debug panel */}
-        {debug && (
-          <div className="mt-4 w-full max-w-xl bg-ash-800 border border-ash-500 rounded-xl p-4 animate-fade-in">
-            <div className="text-ash-400 text-xs font-mono mb-2">Debug Info</div>
-            <pre className="text-yellow-300 text-xs font-mono whitespace-pre-wrap break-all">{debug}</pre>
+        {searched && fields.length === 0 && !error && (
+          <div className="mt-8 text-ash-400 font-mono text-sm">
+            No record found for <span className="text-white">{query}</span>
           </div>
         )}
 
         {/* Results */}
-        {records.length > 0 && current && (
-          <div className="mt-8 w-full max-w-xl animate-slide-up">
-            {records.length > 1 && (
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-ash-300 text-sm font-mono">Result {page + 1} of {records.length}</span>
-                <div className="flex gap-2">
-                  <button onClick={() => setPage(p => p - 1)} disabled={page === 0}
-                    className="px-3 py-1 bg-ash-700 hover:bg-ash-600 disabled:opacity-30 rounded-lg text-sm transition-colors">Prev</button>
-                  <button onClick={() => setPage(p => p + 1)} disabled={page === records.length - 1}
-                    className="px-3 py-1 bg-ash-700 hover:bg-ash-600 disabled:opacity-30 rounded-lg text-sm transition-colors">Next</button>
+        {fields.length > 0 && (
+          <div className="mt-8 w-full animate-slide-up">
+
+            {/* Summary bar */}
+            <div className="flex items-center justify-between px-1 mb-3">
+              <span className="text-ash-300 text-sm font-mono">
+                <span className="text-white font-600">{fields.length}</span> fields for{' '}
+                <span className="text-flame-400">{query}</span>
+              </span>
+              <button onClick={() => setShowDebug(p => !p)}
+                className="text-ash-500 hover:text-ash-300 text-xs font-mono transition-colors">
+                {showDebug ? 'hide debug' : 'debug'}
+              </button>
+            </div>
+
+            {/* Category cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            {catOrder.filter(c => categories[c]?.length).map(cat => (
+              <div key={cat} className="bg-ash-800 border border-ash-600 rounded-xl overflow-hidden">
+                <div className="flex items-center gap-2 px-5 py-2.5 border-b border-ash-700 bg-ash-800">
+                  <span className="text-flame-500">{catIcons[cat]}</span>
+                  <span className="text-ash-200 text-xs font-mono uppercase tracking-wider">{cat}</span>
+                  <span className="ml-auto text-ash-500 text-xs font-mono">{categories[cat].length}</span>
+                </div>
+                <div className="divide-y divide-ash-700/40">
+                  {categories[cat].map((f, i) => (
+                    <div key={i} className="flex items-start gap-4 px-5 py-3 hover:bg-ash-700/20 transition-colors">
+                      <span className="text-ash-400 text-xs font-mono w-32 shrink-0 pt-0.5">{f.key}</span>
+                      <span className="text-white text-sm font-mono break-all">{f.value || '—'}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
-            <div className="bg-ash-800 border border-flame-500/30 rounded-xl p-6 glow-flame">
-              <div className="flex items-center gap-2 mb-5">
-                <div className="w-2 h-2 rounded-full bg-flame-500 animate-pulse-slow" />
-                <span className="text-flame-400 text-sm font-mono">record found</span>
-              </div>
-              <div className="space-y-3">
-                {Object.entries(current).map(([k, v]) => (
-                  <div key={k} className="flex gap-3 border-b border-ash-600 pb-3 last:border-0 last:pb-0">
-                    <span className="text-ash-300 text-sm font-mono w-32 shrink-0">{k}</span>
-                    <span className="text-white text-sm font-mono break-all">{String(v) || '—'}</span>
-                  </div>
-                ))}
-              </div>
+            ))}
             </div>
-          </div>
-        )}
 
-        {result !== null && records.length === 0 && !loading && (
-          <div className="mt-8 text-ash-300 font-mono text-sm animate-fade-in">
-            No record found for <span className="text-white">{query}</span>
+            {/* Debug */}
+            {showDebug && debugInfo && (
+              <div className="bg-ash-800 border border-ash-600 rounded-xl p-4">
+                <div className="text-ash-400 text-xs font-mono mb-2">Debug</div>
+                <pre className="text-yellow-300 text-xs font-mono whitespace-pre-wrap break-all">{debugInfo}</pre>
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      <footer className="border-t border-ash-700 px-6 py-4 text-center text-ash-400 text-xs font-mono">
+      <footer className="border-t border-ash-700 px-6 py-4 text-center text-ash-500 text-xs font-mono">
         Drogon — free info lookup
       </footer>
     </main>
