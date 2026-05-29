@@ -17,14 +17,6 @@ export async function initTables() {
     )
   `
   await sql`
-    CREATE TABLE IF NOT EXISTS admin_users (
-      id            SERIAL PRIMARY KEY,
-      email         TEXT UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
-      created_at    TIMESTAMPTZ DEFAULT NOW()
-    )
-  `
-  await sql`
     CREATE TABLE IF NOT EXISTS campaigns (
       id         SERIAL PRIMARY KEY,
       message    TEXT NOT NULL,
@@ -51,25 +43,6 @@ export async function getUserCount() {
 export async function getAllTelegramIds(): Promise<number[]> {
   const rows = await sql`SELECT telegram_id FROM users`
   return rows.map((r: any) => Number(r.telegram_id))
-}
-
-// ── Admin ─────────────────────────────────────────────────────────────────────
-export async function getAdminByEmail(email: string) {
-  const rows = await sql`SELECT * FROM admin_users WHERE email = ${email}`
-  return rows[0] || null
-}
-
-export async function createAdmin(email: string, passwordHash: string) {
-  return sql`
-    INSERT INTO admin_users (email, password_hash)
-    VALUES (${email}, ${passwordHash})
-    RETURNING id, email, created_at
-  `
-}
-
-export async function adminExists(): Promise<boolean> {
-  const rows = await sql`SELECT COUNT(*) AS count FROM admin_users`
-  return Number(rows[0].count) > 0
 }
 
 // ── Campaigns ─────────────────────────────────────────────────────────────────

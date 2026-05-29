@@ -1,15 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { verifyToken } from '@/lib/auth'
+import { neonAuthMiddleware } from '@neondatabase/auth/next/server'
 
-export async function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname.startsWith('/admin/dashboard')) {
-    const token = req.cookies.get('drogon_admin')?.value
-    if (!token) return NextResponse.redirect(new URL('/admin', req.url))
-    const session = await verifyToken(token)
-    if (!session) return NextResponse.redirect(new URL('/admin', req.url))
-  }
-  return NextResponse.next()
-}
+export default neonAuthMiddleware({
+  baseUrl: process.env.NEON_AUTH_URL!,
+  cookies: {
+    secret: process.env.NEON_AUTH_COOKIE_SECRET!,
+  },
+  loginUrl: '/admin',
+})
 
 export const config = {
   matcher: ['/admin/dashboard/:path*'],

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/server-auth'
 import { getUsers } from '@/lib/db'
 import { getUserPhoto } from '@/lib/telegram'
 
@@ -11,7 +11,6 @@ export async function GET() {
 
   const users = await getUsers()
 
-  // Fetch Telegram profile photos in parallel (max 10 at a time to avoid rate limits)
   const withPhotos = await Promise.all(
     (users as any[]).map(async (u) => {
       const photo = await getUserPhoto(Number(u.telegram_id)).catch(() => null)

@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/server-auth'
 import { getAllTelegramIds, getCampaigns, saveCampaign } from '@/lib/db'
 import { broadcastMessage } from '@/lib/telegram'
 

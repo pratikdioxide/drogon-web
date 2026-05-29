@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { authClient } from '@/lib/neon-auth'
 import {
   Users, Search, Megaphone, Settings, LogOut,
   RefreshCw, Send, Eye, EyeOff, ExternalLink,
@@ -155,7 +156,7 @@ export default function Dashboard() {
   useEffect(() => { load() }, [load])
 
   async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' })
+    await authClient.signOut()
     router.push('/admin')
   }
 
