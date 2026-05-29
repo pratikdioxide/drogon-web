@@ -1,2 +1,5 @@
 [nix]
 packages = ["cmakeMinimal"]
+
+[agent]
+expertMode = true
