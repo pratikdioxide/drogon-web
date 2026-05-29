@@ -2,6 +2,10 @@
 import { AuthView } from '@neondatabase/auth-ui'
 
 export default function SignUpPage() {
+  const redirectTo = typeof window !== 'undefined'
+    ? `${window.location.origin}/admin/dashboard`
+    : '/admin/dashboard'
+
   return (
     <main className="min-h-screen bg-ash-900 flex flex-col items-center justify-center px-4">
       <div className="mb-8 text-center">
@@ -10,7 +14,7 @@ export default function SignUpPage() {
       </div>
       <AuthView
         pathname="sign-up"
-        redirectTo="/admin/dashboard"
+        redirectTo={redirectTo}
       />
       <p className="mt-6">
         <a href="/admin" className="text-ash-500 hover:text-ash-300 text-xs font-mono transition-colors">
