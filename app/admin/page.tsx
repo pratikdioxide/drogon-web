@@ -5,7 +5,10 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen bg-ash-900 flex flex-col items-center justify-center px-4">
       <div className="mb-8 text-center">
-        <h1 className="font-display font-800 text-2xl text-white">Drogon Admin</h1>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <img src="/logo.svg" alt="Drogon" className="w-7 h-7" />
+          <h1 className="font-display font-800 text-2xl text-white">Drogon Admin</h1>
+        </div>
         <p className="text-ash-400 text-sm font-mono mt-1">Sign in to your account</p>
       </div>
       <AuthView

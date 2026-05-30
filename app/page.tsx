@@ -74,6 +74,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-ash-900 flex flex-col">
       <header className="border-b border-ash-700 px-6 py-4 flex items-center gap-3">
+        <img src="/logo.svg" alt="Drogon" className="w-5 h-5" />
         <span className="font-display font-800 text-xl text-white tracking-tight">Drogon</span>
         <span className="text-xs bg-ash-700 text-ash-300 px-2 py-0.5 rounded-full font-mono">free lookup</span>
       </header>

@@ -6,7 +6,7 @@ import {
   Users, Search, Megaphone, Settings, LogOut,
   RefreshCw, Send, Eye, EyeOff, ExternalLink,
   Bot, Clock, Activity, Hash, ChevronRight,
-  AlertCircle, CheckCircle2, Loader2, Zap
+  AlertCircle, CheckCircle2, Loader2
 } from 'lucide-react'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -192,39 +192,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-ash-900 font-display flex">
 
-      {/* ── Sidebar (desktop) ─────────────────────────────────────────── */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-16 bg-ash-800 border-r border-ash-700 flex-col items-center py-5 gap-2 z-20">
-        {/* Logo */}
-        <div className="w-9 h-9 bg-flame-500 rounded-xl flex items-center justify-center mb-4">
-          <Zap size={18} className="text-white" />
-        </div>
-
-        <nav className="flex flex-col gap-1.5 flex-1 w-full px-2">
-          {NAV_ITEMS.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
-              title={t.label}
-              className={`w-full h-10 rounded-lg flex items-center justify-center transition-all duration-150 ${
-                tab === t.id
-                  ? 'bg-flame-500/15 text-flame-400 border border-flame-500/25'
-                  : 'text-ash-400 hover:bg-ash-700 hover:text-ash-200'
-              }`}
-            >
-              {t.icon}
-            </button>
-          ))}
-        </nav>
-
-        <button
-          onClick={logout}
-          title="Logout"
-          className="text-ash-500 hover:text-red-400 transition-colors p-2 rounded-lg hover:bg-red-900/20"
-        >
-          <LogOut size={18} />
-        </button>
-      </aside>
-
       {/* ── Bottom nav (mobile) ────────────────────────────────────────── */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-ash-800 border-t border-ash-700 flex items-center justify-around px-2 py-2">
         {NAV_ITEMS.map(t => (
@@ -249,7 +216,7 @@ export default function Dashboard() {
       </nav>
 
       {/* ── Main ──────────────────────────────────────────────────────── */}
-      <main className="flex-1 md:ml-16 px-4 md:px-8 pt-6 pb-24 md:pb-8 max-w-full overflow-x-hidden">
+      <main className="flex-1 px-4 md:px-8 pt-6 pb-24 md:pb-8 max-w-full overflow-x-hidden">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
