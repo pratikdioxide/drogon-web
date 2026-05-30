@@ -511,6 +511,9 @@ video {
 [hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
+.visible{
+  visibility: visible;
+}
 .fixed{
   position: fixed;
 }
@@ -1232,12 +1235,21 @@ video {
   --tw-text-opacity: 1;
   color: rgb(36 36 41 / var(--tw-text-opacity, 1));
 }
+.text-ash-900{
+  --tw-text-opacity: 1;
+  color: rgb(10 10 11 / var(--tw-text-opacity, 1));
+}
 .opacity-40{
   opacity: 0.4;
 }
 .shadow-lg{
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.shadow-xl{
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 .filter{
@@ -1349,6 +1361,10 @@ input:focus, textarea:focus {
 .hover\:bg-gray-700:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
+}
+.hover\:bg-ash-100:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(200 200 216 / var(--tw-bg-opacity, 1));
 }
 .hover\:text-ash-200:hover{
   --tw-text-opacity: 1;
