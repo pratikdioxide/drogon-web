@@ -11,16 +11,6 @@ exports.id = "vendor-chunks/@neondatabase";
 exports.ids = ["vendor-chunks/@neondatabase"];
 exports.modules = {
 
-/***/ "(ssr)/./node_modules/@neondatabase/auth-ui/dist/style.css":
-/*!***********************************************************!*\
-  !*** ./node_modules/@neondatabase/auth-ui/dist/style.css ***!
-  \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (\"278446854360\");\nif (false) {}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi9ub2RlX21vZHVsZXMvQG5lb25kYXRhYmFzZS9hdXRoLXVpL2Rpc3Qvc3R5bGUuY3NzIiwibWFwcGluZ3MiOiI7Ozs7QUFBQSxpRUFBZSxjQUFjO0FBQzdCLElBQUksS0FBVSxFQUFFLEVBQXVCIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vZHJvZ29uLXdlYi8uL25vZGVfbW9kdWxlcy9AbmVvbmRhdGFiYXNlL2F1dGgtdWkvZGlzdC9zdHlsZS5jc3M/ODdiZCJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZGVmYXVsdCBcIjI3ODQ0Njg1NDM2MFwiXG5pZiAobW9kdWxlLmhvdCkgeyBtb2R1bGUuaG90LmFjY2VwdCgpIH1cbiJdLCJuYW1lcyI6W10sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(ssr)/./node_modules/@neondatabase/auth-ui/dist/style.css\n");
-
-/***/ }),
-
 /***/ "(ssr)/./node_modules/@neondatabase/auth/dist/adapter-core-BFMM3lwe.mjs":
 /*!************************************************************************!*\
   !*** ./node_modules/@neondatabase/auth/dist/adapter-core-BFMM3lwe.mjs ***!

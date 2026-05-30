@@ -1,6 +1,5 @@
 'use client'
 import dynamic from 'next/dynamic'
-import '@neondatabase/auth-ui/css'
 import { authClient } from '@/lib/neon-auth'
 
 const NeonAuthUIProvider = dynamic(
