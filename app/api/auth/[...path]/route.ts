@@ -4,8 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const BASE = process.env.NEON_AUTH_URL!
 
-// Derive the Neon Auth server's own origin so it trusts the request
-// (mirrors what prepareRequestHeaders does in the official handler)
 function neonAuthOrigin(): string {
   try {
     const url = new URL(BASE)
@@ -17,19 +15,42 @@ function neonAuthOrigin(): string {
 
 const NEON_ORIGIN = neonAuthOrigin()
 
+/**
+ * Rewrite a Set-Cookie header so it applies to our domain, not Neon's.
+ * Strips Domain=..., strips Secure flag (Replit proxies over HTTPS already),
+ * and sets SameSite=Lax so cookies survive page navigation.
+ */
+function rewriteSetCookie(raw: string): string {
+  return raw
+    .split(';')
+    .map(part => part.trim())
+    .filter(part => {
+      const lower = part.toLowerCase()
+      // Drop domain so browser uses current host
+      if (lower.startsWith('domain=')) return false
+      // Drop __Secure- cookies' Secure flag — Replit terminates TLS upstream
+      // Actually keep Secure so __Secure- prefix validation passes in browser
+      return true
+    })
+    .map(part => {
+      const lower = part.toLowerCase()
+      // Replace SameSite=None (requires HTTPS + Secure) with Lax for safety
+      if (lower.startsWith('samesite=none')) return 'SameSite=Lax'
+      return part
+    })
+    .join('; ')
+}
+
 async function proxy(req: NextRequest): Promise<NextResponse> {
   const subPath = req.nextUrl.pathname.replace(/^\/api\/auth\/?/, '')
 
   const headers: Record<string, string> = {
     'content-type': req.headers.get('content-type') || 'application/json',
     'accept': req.headers.get('accept') || 'application/json',
-    // Use the Neon Auth server's own origin — this is how the official handler
-    // bypasses the origin/CSRF check (not just x-neon-auth-middleware alone)
     'origin': NEON_ORIGIN,
     'x-neon-auth-middleware': 'true',
   }
 
-  // Forward user-agent, authorization, referer as the official handler does
   const ua = req.headers.get('user-agent')
   if (ua) headers['user-agent'] = ua
   const auth = req.headers.get('authorization')
@@ -55,12 +76,19 @@ async function proxy(req: NextRequest): Promise<NextResponse> {
   })
 
   const resHeaders = new Headers()
+
+  // Forward content-type
+  const ct = upstream.headers.get('content-type')
+  if (ct) resHeaders.set('content-type', ct)
+
+  // Rewrite all Set-Cookie headers — strip domain so they bind to our origin
+  const rawSetCookies: string[] = []
   upstream.headers.forEach((v, k) => {
-    const key = k.toLowerCase()
-    if (key === 'set-cookie' || key === 'content-type' || key === 'content-length') {
-      resHeaders.append(k, v)
-    }
+    if (k.toLowerCase() === 'set-cookie') rawSetCookies.push(v)
   })
+  for (const raw of rawSetCookies) {
+    resHeaders.append('set-cookie', rewriteSetCookie(raw))
+  }
 
   const data = await upstream.arrayBuffer()
   return new NextResponse(data, {

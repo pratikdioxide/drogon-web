@@ -193,7 +193,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-ash-900 font-display flex">
 
       {/* ── Sidebar (desktop) ─────────────────────────────────────────── */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-16 bg-ash-800 border-r border-ash-600 flex-col items-center py-5 gap-2 z-20">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-16 bg-ash-700 border-r border-ash-500 flex-col items-center py-5 gap-2 z-20">
         {/* Logo */}
         <div className="w-9 h-9 bg-flame-500 rounded-xl flex items-center justify-center mb-4">
           <img src="/logo.svg" alt="Drogon" className="w-5 h-5" />
