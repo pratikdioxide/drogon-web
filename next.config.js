@@ -8,6 +8,7 @@ const nextConfig = {
     '@neondatabase/auth-ui',
     '@daveyplate/better-auth-ui',
   ],
+  allowedDevOrigins: ['*.replit.dev', '*.sisko.replit.dev', '*.repl.co'],
 }
 
 module.exports = nextConfig
