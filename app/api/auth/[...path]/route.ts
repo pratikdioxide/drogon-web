@@ -4,21 +4,38 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const BASE = process.env.NEON_AUTH_URL!
 
-async function proxy(req: NextRequest): Promise<NextResponse> {
-  // Extract sub-path from URL directly — avoids Next.js 14/15 params incompatibility
-  const subPath = req.nextUrl.pathname.replace(/^\/api\/auth\/?/, '')
+// Derive the Neon Auth server's own origin so it trusts the request
+// (mirrors what prepareRequestHeaders does in the official handler)
+function neonAuthOrigin(): string {
+  try {
+    const url = new URL(BASE)
+    return `${url.protocol}//${url.host}`
+  } catch {
+    return BASE
+  }
+}
 
-  const origin =
-    req.headers.get('origin') ||
-    req.headers.get('referer')?.split('/').slice(0, 3).join('/') ||
-    new URL(req.url).origin
+const NEON_ORIGIN = neonAuthOrigin()
+
+async function proxy(req: NextRequest): Promise<NextResponse> {
+  const subPath = req.nextUrl.pathname.replace(/^\/api\/auth\/?/, '')
 
   const headers: Record<string, string> = {
     'content-type': req.headers.get('content-type') || 'application/json',
     'accept': req.headers.get('accept') || 'application/json',
-    'origin': origin,
+    // Use the Neon Auth server's own origin — this is how the official handler
+    // bypasses the origin/CSRF check (not just x-neon-auth-middleware alone)
+    'origin': NEON_ORIGIN,
     'x-neon-auth-middleware': 'true',
   }
+
+  // Forward user-agent, authorization, referer as the official handler does
+  const ua = req.headers.get('user-agent')
+  if (ua) headers['user-agent'] = ua
+  const auth = req.headers.get('authorization')
+  if (auth) headers['authorization'] = auth
+  const referer = req.headers.get('referer')
+  if (referer) headers['referer'] = referer
 
   const cookie = req.headers.get('cookie')
   if (cookie) headers['cookie'] = cookie

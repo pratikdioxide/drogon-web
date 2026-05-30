@@ -1,0 +1,1 @@
+- [Neon Auth proxy origin fix](neon-auth-proxy-origin.md) — proxy must set `origin` to the Neon Auth server's own host, not the browser's origin
