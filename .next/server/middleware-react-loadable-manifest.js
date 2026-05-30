@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"app/admin/layout.tsx -> @neondatabase/auth-ui\":{\"id\":\"app/admin/layout.tsx -> @neondatabase/auth-ui\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_neondatabase_auth-ui_dist_index_mjs.js\"]}}"

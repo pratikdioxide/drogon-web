@@ -15,6 +15,7 @@ DATABASE_URL = "postgresql://neondb_owner:npg_ELRIYcdjy16b@ep-solitary-bird-aqko
 BOT_TOKEN = "8967226051:AAGGPCUMQE2pm4e6xBwUeaGIbwOnDYkptsI"
 API_BASE_URL = "https://leakosint-by-noneusr.vercel.app/@None_usernam3/free/public/api/search="
 BOT_HEALTH_URL = "https://drogon-bot-main.onrender.com/health"
+NEON_AUTH_COOKIE_SECRET = "GzGxgH+B2xeo5QLjxFCqRJvX/U2xBSq9uU812iys/lU="
 
 [workflows]
 runButton = "Project"
