@@ -187,15 +187,15 @@ export default function Home() {
         </div>
       )}
 
-      <div className="flex-1 flex flex-col items-center justify-start pt-16 pb-12 px-4 md:px-[10%]">
+      <div className="flex-1 flex flex-col items-center justify-start pt-10 md:pt-16 pb-12 px-4 md:px-[10%]">
 
         {/* Hero */}
-        <div className="text-center mb-10 animate-fade-in max-w-2xl">
+        <div className="text-center mb-6 md:mb-10 animate-fade-in max-w-2xl">
           <div className="inline-flex items-center gap-1.5 bg-flame-500/10 border border-flame-500/20 text-flame-400 text-xs font-mono px-3 py-1 rounded-full mb-5">
             <span className="w-1.5 h-1.5 rounded-full bg-flame-500 animate-pulse-slow" />
             Powered by Drogon Bot
           </div>
-          <h1 className="font-display font-800 text-white mb-4 leading-none" style={{ fontSize: 'clamp(2.2rem, 6vw, 3.8rem)' }}>
+          <h1 className="font-display font-800 text-white mb-4 leading-none" style={{ fontSize: 'clamp(1.75rem, 6vw, 3.8rem)' }}>
             Search anyone by<br />
             <span className="text-flame-500">email</span> or <span className="text-flame-500">number</span>
           </h1>
@@ -217,10 +217,10 @@ export default function Home() {
               />
             </div>
             <button type="submit" disabled={loading}
-              className="px-6 py-3.5 bg-flame-500 hover:bg-flame-600 disabled:opacity-50 text-white font-display font-700 rounded-xl text-sm transition-colors flex items-center gap-2">
+              className="px-4 sm:px-6 py-3.5 bg-flame-500 hover:bg-flame-600 disabled:opacity-50 text-white font-display font-700 rounded-xl text-sm transition-colors flex items-center gap-1.5 shrink-0">
               {loading
-                ? <><Loader2 size={14} className="animate-spin" /> Searching</>
-                : <>Search <ChevronRight size={14} /></>
+                ? <><Loader2 size={14} className="animate-spin" /><span className="hidden sm:inline">Searching</span></>
+                : <><span className="hidden sm:inline">Search</span><ChevronRight size={14} /></>
               }
             </button>
           </div>
@@ -267,7 +267,7 @@ export default function Home() {
                 <div className="divide-y divide-ash-700/40">
                   {categories[cat].map((f, i) => (
                     <div key={i} className="flex items-start gap-4 px-5 py-3 hover:bg-ash-700/20 transition-colors">
-                      <span className="text-ash-400 text-xs font-mono w-32 shrink-0 pt-0.5">{f.key}</span>
+                      <span className="text-ash-400 text-xs font-mono w-20 sm:w-32 shrink-0 pt-0.5 break-all">{f.key}</span>
                       <span className="text-white text-sm font-mono break-all">{f.value || '—'}</span>
                     </div>
                   ))}
