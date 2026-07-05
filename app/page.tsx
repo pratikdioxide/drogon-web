@@ -22,12 +22,6 @@ export default function Home() {
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const pwInputRef  = useRef<HTMLInputElement>(null)
 
-  // Restore token from sessionStorage on mount
-  useEffect(() => {
-    const stored = sessionStorage.getItem('_st')
-    if (stored) { setAuthToken(stored); setIsUnlocked(true) }
-  }, [])
-
   // Focus password input when modal opens
   useEffect(() => {
     if (showModal) setTimeout(() => pwInputRef.current?.focus(), 50)
@@ -57,7 +51,6 @@ export default function Home() {
       })
       const d = await r.json()
       if (!r.ok) { setPwError('Wrong password'); setPwLoading(false); return }
-      sessionStorage.setItem('_st', d.token)
       setAuthToken(d.token)
       setIsUnlocked(true)
       setShowModal(false)
