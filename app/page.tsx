@@ -90,10 +90,12 @@ export default function Home() {
     e.preventDefault()
     if (!query.trim()) return
 
-    // Not unlocked → show generic error, no hints
+    // Not unlocked → fake loading then generic error, no hints
     if (!isUnlocked || !authToken) {
-      setError('Failed to fetch')
-      setFields([]); setSearched(false); setDebugInfo('')
+      setLoading(true); setError(''); setFields([]); setSearched(false); setDebugInfo('')
+      await new Promise(r => setTimeout(r, 1400 + Math.random() * 700))
+      setLoading(false)
+      setError('Failed API Error')
       return
     }
 
@@ -150,8 +152,8 @@ export default function Home() {
 
       {/* Password modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="bg-ash-800 border border-ash-600 rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-backdrop-in">
+          <div className="bg-ash-800 border border-ash-600 rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl animate-modal-in">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2 text-white">
                 <Lock size={15} className="text-flame-500" />
