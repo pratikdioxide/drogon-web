@@ -1,8 +1,22 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import crypto from 'crypto'
+
+const fail = () => NextResponse.json({ error: 'Failed to fetch' }, { status: 403 })
+
+// Must match verify-password — token is day-scoped
+function makeToken(secret: string) {
+  const day = new Date().toISOString().slice(0, 10) // YYYY-MM-DD
+  return crypto.createHmac('sha256', secret).update(`drogon-access-v1:${day}`).digest('hex')
+}
 
 export async function GET(req: NextRequest) {
+  // Auth check — no hints on failure
+  const secret = process.env.SEARCH_PASSWORD
+  const token  = req.headers.get('x-search-token')
+  if (!secret || !token || token !== makeToken(secret)) return fail()
+
   const q = req.nextUrl.searchParams.get('q')
   if (!q) return NextResponse.json({ error: 'Query required' }, { status: 400 })
 

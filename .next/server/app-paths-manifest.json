@@ -1,8 +1,5 @@
 {
-  "/api/bot-status/route": "app/api/bot-status/route.js",
-  "/api/users/route": "app/api/users/route.js",
-  "/api/campaign/route": "app/api/campaign/route.js",
-  "/api/auth/[...path]/route": "app/api/auth/[...path]/route.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/dashboard/page": "app/admin/dashboard/page.js"
+  "/api/verify-password/route": "app/api/verify-password/route.js",
+  "/api/search/route": "app/api/search/route.js",
+  "/page": "app/page.js"
 }

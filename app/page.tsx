@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { User, Phone, MapPin, FileText, LayoutList, Search, Loader2, ChevronRight } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { User, Phone, MapPin, FileText, LayoutList, Search, Loader2, ChevronRight, X, Lock } from 'lucide-react'
 
 export default function Home() {
   const [query, setQuery]       = useState('')
@@ -10,6 +10,64 @@ export default function Home() {
   const [searched, setSearched] = useState(false)
   const [showDebug, setShowDebug] = useState(false)
   const [debugInfo, setDebugInfo] = useState('')
+
+  // Auth state — cleared on refresh (sessionStorage)
+  const [isUnlocked, setIsUnlocked] = useState(false)
+  const [authToken, setAuthToken]   = useState('')
+  const [showModal, setShowModal]   = useState(false)
+  const [pw, setPw]                 = useState('')
+  const [pwError, setPwError]       = useState('')
+  const [pwLoading, setPwLoading]   = useState(false)
+  const clickCount = useRef(0)
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const pwInputRef  = useRef<HTMLInputElement>(null)
+
+  // Restore token from sessionStorage on mount
+  useEffect(() => {
+    const stored = sessionStorage.getItem('_st')
+    if (stored) { setAuthToken(stored); setIsUnlocked(true) }
+  }, [])
+
+  // Focus password input when modal opens
+  useEffect(() => {
+    if (showModal) setTimeout(() => pwInputRef.current?.focus(), 50)
+  }, [showModal])
+
+  function handleLogoClick() {
+    clickCount.current += 1
+    if (clickTimer.current) clearTimeout(clickTimer.current)
+    if (clickCount.current >= 3) {
+      clickCount.current = 0
+      setShowModal(true)
+      setPw(''); setPwError('')
+    } else {
+      clickTimer.current = setTimeout(() => { clickCount.current = 0 }, 1200)
+    }
+  }
+
+  async function submitPassword(e: React.FormEvent) {
+    e.preventDefault()
+    if (!pw.trim()) return
+    setPwLoading(true); setPwError('')
+    try {
+      const r = await fetch('/api/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw }),
+      })
+      const d = await r.json()
+      if (!r.ok) { setPwError('Wrong password'); setPwLoading(false); return }
+      sessionStorage.setItem('_st', d.token)
+      setAuthToken(d.token)
+      setIsUnlocked(true)
+      setShowModal(false)
+      setPw('')
+    } catch {
+      setPwError('Network error')
+    } finally {
+      setPwLoading(false)
+    }
+  }
 
   function parseFields(data: any): { key: string; value: string }[] {
     if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'string') {
@@ -31,10 +89,18 @@ export default function Home() {
   async function search(e: React.FormEvent) {
     e.preventDefault()
     if (!query.trim()) return
+
+    // Not unlocked → show generic error, no hints
+    if (!isUnlocked || !authToken) {
+      setError('Failed to fetch')
+      setFields([]); setSearched(false); setDebugInfo('')
+      return
+    }
+
     setLoading(true); setError(''); setFields([]); setSearched(false); setDebugInfo('')
     try {
       const url = `/api/search?q=${encodeURIComponent(query.trim())}`
-      const r   = await fetch(url)
+      const r   = await fetch(url, { headers: { 'x-search-token': authToken } })
       const text = await r.text()
       setDebugInfo(`Status: ${r.status}\nResponse: ${text.slice(0, 800)}`)
       let d
@@ -74,10 +140,50 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-ash-900 flex flex-col">
       <header className="border-b border-ash-700 px-6 py-4 flex items-center gap-3">
-        <img src="/logo.svg" alt="Drogon" className="w-5 h-5" />
-        <span className="font-display font-800 text-xl text-white tracking-tight">Drogon</span>
+        {/* Triple-click zone — no visual hint */}
+        <span onClick={handleLogoClick} className="flex items-center gap-3 cursor-default select-none">
+          <img src="/logo.svg" alt="Drogon" className="w-5 h-5" />
+          <span className="font-display font-800 text-xl text-white tracking-tight">Drogon</span>
+        </span>
         <span className="text-xs bg-ash-700 text-ash-300 px-2 py-0.5 rounded-full font-mono">free lookup</span>
       </header>
+
+      {/* Password modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-ash-800 border border-ash-600 rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2 text-white">
+                <Lock size={15} className="text-flame-500" />
+                <span className="font-display font-700 text-sm">Access required</span>
+              </div>
+              <button onClick={() => setShowModal(false)} className="text-ash-400 hover:text-ash-200 transition-colors">
+                <X size={16} />
+              </button>
+            </div>
+            <form onSubmit={submitPassword} className="flex flex-col gap-3">
+              <input
+                ref={pwInputRef}
+                type="password"
+                value={pw}
+                onChange={e => { setPw(e.target.value); setPwError('') }}
+                placeholder="Password"
+                className="w-full bg-ash-900 border border-ash-500 rounded-xl px-4 py-3 text-white font-mono text-sm placeholder:text-ash-500 focus:outline-none focus:border-flame-500 transition-colors"
+              />
+              {pwError && (
+                <p className="text-red-400 text-xs font-mono">{pwError}</p>
+              )}
+              <button
+                type="submit"
+                disabled={pwLoading || !pw.trim()}
+                className="w-full py-3 bg-flame-500 hover:bg-flame-600 disabled:opacity-50 text-white font-display font-700 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+              >
+                {pwLoading ? <><Loader2 size={13} className="animate-spin" /> Verifying…</> : 'Unlock'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="flex-1 flex flex-col items-center justify-start pt-16 pb-12 px-4 md:px-[10%]">
 
